@@ -6,10 +6,13 @@ class CardLearningSystem {
         this.currentMode = 1;
         this.currentCardIndex = 0;
         this.emptyInputCount = 0;
+        this.practiceRemovedCount = 0; // Track cards removed in practice mode
+        this.reviewRightCount = 0; // Track cards moved right during current review session
         
         this.initializeElements();
         this.setupEventListeners();
         this.loadFromLocalStorage();
+        this.updateCardCounters(); // Initialize counters
     }
 
     initializeElements() {
@@ -22,6 +25,10 @@ class CardLearningSystem {
         this.cursor = document.getElementById('cursor');
         this.cardText = document.getElementById('card-text');
         this.practiceCardText = document.getElementById('practice-card-text');
+        
+        // Card counter elements
+        this.deckCountElement = document.getElementById('deck-count');
+        this.practiceRemovedElement = document.getElementById('practice-removed-count');
     }
 
     setupEventListeners() {
@@ -140,6 +147,7 @@ class CardLearningSystem {
             this.emptyInputCount = 0;
             this.deckInit.push(text);
             this.saveToLocalStorage();
+            this.updateCardCounters(); // Update counters when card is added
         }
         
         this.cardInput.value = '';
@@ -155,8 +163,11 @@ class CardLearningSystem {
         
         this.currentMode = 2;
         this.currentCardIndex = 0;
+        this.practiceRemovedCount = 0; // Reset practice removed count when entering review mode
+        this.reviewRightCount = 0; // Reset review right count when entering review mode
         this.showMode(2);
         this.displayCurrentCard();
+        this.updateCardCounters(); // Update counters when entering review mode
     }
 
     displayCurrentCard() {
@@ -190,6 +201,8 @@ class CardLearningSystem {
             const card = this.deckNext[this.currentCardIndex];
             this.deckStorage.push(card);
             this.deckNext.splice(this.currentCardIndex, 1);
+            this.practiceRemovedCount++; // Increment practice removed count
+            this.updateCardCounters(); // Update counters
             this.animateSwipe('left');
             setTimeout(() => this.displayCurrentCard(), 300);
         }
@@ -200,6 +213,8 @@ class CardLearningSystem {
             // Review mode: swipe right = next
             const card = this.deckInit[this.currentCardIndex];
             this.deckNext.push(card);
+            this.reviewRightCount++; // Increment review right count
+            this.updateCardCounters(); // Update counters when card moves to next mode
             this.animateSwipe('right');
             this.currentCardIndex++;
             setTimeout(() => this.displayCurrentCard(), 300);
@@ -222,8 +237,10 @@ class CardLearningSystem {
     advanceToPracticeMode() {
         this.currentMode = 3;
         this.currentCardIndex = 0;
+        this.practiceRemovedCount = 0; // Reset practice removed count when entering practice mode
         this.showMode(3);
         this.displayCurrentCard();
+        this.updateCardCounters(); // Update counters when entering practice mode
     }
 
     advanceToResetMode() {
@@ -243,9 +260,12 @@ class CardLearningSystem {
         this.currentMode = 1;
         this.currentCardIndex = 0;
         this.emptyInputCount = 0;
+        this.practiceRemovedCount = 0; // Reset practice removed count
+        this.reviewRightCount = 0; // Reset review right count
         
         this.saveToLocalStorage();
         this.showMode(1);
+        this.updateCardCounters(); // Update counters after reset
     }
 
     showMode(mode) {
@@ -278,7 +298,8 @@ class CardLearningSystem {
         localStorage.setItem('cardLearningSystem', JSON.stringify({
             deckInit: this.deckInit,
             deckNext: this.deckNext,
-            deckStorage: this.deckStorage
+            deckStorage: this.deckStorage,
+            practiceRemovedCount: this.practiceRemovedCount
         }));
     }
 
@@ -289,7 +310,9 @@ class CardLearningSystem {
             this.deckInit = data.deckInit || [];
             this.deckNext = data.deckNext || [];
             this.deckStorage = data.deckStorage || [];
+            this.practiceRemovedCount = data.practiceRemovedCount || 0; // Load practice removed count
         }
+        this.updateCardCounters(); // Update counters after loading data
     }
 
     clearMemory() {
@@ -299,9 +322,30 @@ class CardLearningSystem {
         this.deckStorage = [];
         this.currentCardIndex = 0;
         this.emptyInputCount = 0;
+        this.practiceRemovedCount = 0; // Clear practice removed count
+        this.reviewRightCount = 0; // Clear review right count
         
         // Clear localStorage
         localStorage.removeItem('cardLearningSystem');
+        this.updateCardCounters(); // Update counters after clearing
+    }
+
+    updateCardCounters() {
+        if (this.deckCountElement) {
+            // In review mode (mode 2), show count of cards moved right during current session
+            // In practice mode (mode 3), show current practice deck size
+            // In other modes, show total deck size
+            if (this.currentMode === 2) {
+                this.deckCountElement.textContent = this.reviewRightCount;
+            } else if (this.currentMode === 3) {
+                this.deckCountElement.textContent = this.deckNext.length;
+            } else {
+                this.deckCountElement.textContent = this.deckInit.length;
+            }
+        }
+        if (this.practiceRemovedElement) {
+            this.practiceRemovedElement.textContent = this.practiceRemovedCount;
+        }
     }
 }
 

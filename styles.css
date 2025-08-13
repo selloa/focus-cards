@@ -32,6 +32,7 @@ body {
     font-size: 24px;
     font-weight: bold;
     color: black;
+    opacity: 0.6;
 }
 
 #left-counter {
@@ -161,14 +162,43 @@ body {
 .instruction {
     font-size: 2vw;
     opacity: 0.7;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .instruction.left {
     text-align: left;
+    justify-content: flex-start;
 }
 
 .instruction.right {
     text-align: right;
+    justify-content: flex-end;
+}
+
+.arrow {
+    font-size: 1.5vw;
+    opacity: 0.8;
+}
+
+.icon {
+    font-size: 2.5vw;
+    opacity: 0.9;
+}
+
+/* Icon-specific styling */
+.discard-icon {
+    color: #ff4444;
+}
+
+.progress-icon {
+    color: #44aa44;
+}
+
+.infinity-icon {
+    color: #4444ff;
+    font-weight: bold;
 }
 
 /* Reset Mode */
@@ -198,6 +228,15 @@ body {
     
     .instruction {
         font-size: 3vw;
+        gap: 6px;
+    }
+    
+    .arrow {
+        font-size: 2.5vw;
+    }
+    
+    .icon {
+        font-size: 4vw;
     }
     
     #reset-message h1 {
@@ -220,6 +259,15 @@ body {
     
     .instruction {
         font-size: 4vw;
+        gap: 5px;
+    }
+    
+    .arrow {
+        font-size: 3vw;
+    }
+    
+    .icon {
+        font-size: 5vw;
     }
     
     #reset-message h1 {

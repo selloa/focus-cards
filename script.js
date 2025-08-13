@@ -47,6 +47,9 @@ class CardLearningSystem {
         
         // Title screen element
         this.titleScreen = document.getElementById('title-screen');
+        
+        // Watermark element
+        this.watermark = document.getElementById('watermark');
     }
 
     setupEventListeners() {
@@ -230,21 +233,30 @@ class CardLearningSystem {
     }
 
     showTitleScreen() {
+        // Show watermark after title screen fade in (0.4s)
+        setTimeout(() => {
+            if (this.watermark) {
+                this.watermark.style.opacity = '1';
+            }
+        }, 400);
+        
         // Title screen timing: fade in (0.4s) + brief linger (0.2s) + fade out (1.2s) = 1.8s total
         setTimeout(() => {
             if (this.titleScreen) {
                 this.titleScreen.classList.add('fade-out');
-                
-                // Remove title screen from DOM after fade out
-                setTimeout(() => {
-                    if (this.titleScreen && this.titleScreen.parentNode) {
-                        this.titleScreen.parentNode.removeChild(this.titleScreen);
-                    }
-                    // Disable fullscreen shortcut after title screen is completely gone
-                    this.titleScreenActive = false;
-                }, 1200);
             }
+            
+            // Remove title screen from DOM after fade out
+            setTimeout(() => {
+                if (this.titleScreen && this.titleScreen.parentNode) {
+                    this.titleScreen.parentNode.removeChild(this.titleScreen);
+                }
+                // Disable fullscreen shortcut after title screen is completely gone
+                this.titleScreenActive = false;
+            }, 1200);
         }, 600); // 0.4s fade in + 0.2s linger = 0.6s before starting fade out
+        
+        // Watermark stays visible permanently (no fade out)
     }
 
     updateCursorPosition(text) {

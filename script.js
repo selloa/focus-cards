@@ -14,11 +14,16 @@ class CardLearningSystem {
         this.fadeOutDelay = 3000; // 3 seconds of inactivity before fade-out
         this.fadeOutElements = [];
         
+        // Color scheme functionality
+        this.colorSchemes = ['default', 'warm', 'ocean', 'lavender', 'sage', 'minimal'];
+        this.currentColorSchemeIndex = 0;
+        
         this.initializeElements();
         this.setupEventListeners();
         this.setupInactivityTracking();
         this.loadFromLocalStorage();
         this.updateCardCounters(); // Initialize counters
+        this.initializeColorScheme(); // Initialize random color scheme
     }
 
     initializeElements() {
@@ -186,6 +191,21 @@ class CardLearningSystem {
         instructions.forEach(instruction => instruction.classList.remove('fade-out'));
         arrows.forEach(arrow => arrow.classList.remove('fade-out'));
         icons.forEach(icon => icon.classList.remove('fade-out'));
+    }
+
+    initializeColorScheme() {
+        // Start with a random color scheme
+        this.currentColorSchemeIndex = Math.floor(Math.random() * this.colorSchemes.length);
+        this.applyColorScheme();
+    }
+
+    applyColorScheme() {
+        const scheme = this.colorSchemes[this.currentColorSchemeIndex];
+        document.documentElement.removeAttribute('data-theme');
+        
+        if (scheme !== 'default') {
+            document.documentElement.setAttribute('data-theme', scheme);
+        }
     }
 
     updateCursorPosition(text) {

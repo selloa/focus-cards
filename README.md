@@ -13,6 +13,7 @@ FOCUS CARDS is a productivity tool that helps you organize and tackle your tasks
 - **Touch & Keyboard Support**: Works seamlessly on mobile and desktop
 - **Local Storage**: Your cards persist between sessions
 - **Auto-Fade UI**: Interface elements fade out during inactivity for cleaner focus
+- **Color Schemes**: Multiple calming color themes that start randomly on each load
 - **Responsive Design**: Optimized for any screen size
 
 ## 🚀 How to Use

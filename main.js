@@ -1,0 +1,235 @@
+const { app, BrowserWindow, Menu, globalShortcut } = require('electron');
+const path = require('path');
+
+// Keep a global reference of the window object
+let mainWindow;
+
+function createWindow() {
+  // Create the browser window
+  mainWindow = new BrowserWindow({
+    width: 1200,
+    height: 800,
+    minWidth: 100,
+    minHeight: 100,
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true,
+      enableRemoteModule: false,
+      webSecurity: true
+    },
+    icon: path.join(__dirname, 'assets/icon.ico'),
+    show: false, // Don't show until ready
+    titleBarStyle: 'hidden',
+    frame: false,
+    fullscreenable: true,
+    resizable: true,
+    backgroundColor: '#ffffff'
+  });
+
+  // Load the index.html file
+  mainWindow.loadFile('index.html');
+
+  // Show window when ready to prevent visual flash
+  mainWindow.once('ready-to-show', () => {
+    mainWindow.show();
+    
+    // Inject CSS and JS for window dragging
+    injectWindowDragging();
+    
+    // Optional: Open DevTools in development
+    if (process.argv.includes('--dev')) {
+      mainWindow.webContents.openDevTools();
+    }
+  });
+
+  // Handle window closed
+  mainWindow.on('closed', () => {
+    mainWindow = null;
+  });
+
+  // Register global shortcuts
+  registerGlobalShortcuts();
+}
+
+function registerGlobalShortcuts() {
+  // Register Ctrl+X for exit
+  globalShortcut.register('CommandOrControl+X', () => {
+    app.quit();
+  });
+
+  // Register Alt+Enter for fullscreen toggle
+  globalShortcut.register('Alt+Enter', () => {
+    if (mainWindow) {
+      mainWindow.setFullScreen(!mainWindow.isFullScreen());
+    }
+  });
+
+  // Register F11 for fullscreen toggle (keep existing)
+  globalShortcut.register('F11', () => {
+    if (mainWindow) {
+      mainWindow.setFullScreen(!mainWindow.isFullScreen());
+    }
+  });
+
+  // Register F5 for page refresh/color scheme change
+  globalShortcut.register('F5', () => {
+    if (mainWindow) {
+      mainWindow.reload();
+    }
+  });
+
+  // Register Ctrl+R for page refresh/color scheme change
+  globalShortcut.register('CommandOrControl+R', () => {
+    if (mainWindow) {
+      mainWindow.reload();
+    }
+  });
+
+  // Register Ctrl+Shift+I for DevTools (development only)
+  if (process.argv.includes('--dev')) {
+    globalShortcut.register('CommandOrControl+Shift+I', () => {
+      if (mainWindow) {
+        mainWindow.webContents.toggleDevTools();
+      }
+    });
+  }
+}
+
+function injectWindowDragging() {
+  // Inject CSS for window dragging
+  mainWindow.webContents.insertCSS(`
+    body {
+      -webkit-app-region: drag;
+      user-select: none;
+    }
+    
+    /* Make interactive elements non-draggable */
+    input, button, a, [contenteditable], .watermark {
+      -webkit-app-region: no-drag;
+      user-select: text;
+    }
+    
+    /* Ensure text can be selected in input fields */
+    input {
+      user-select: text;
+      -webkit-user-select: text;
+    }
+  `);
+}
+
+// Create menu template
+function createMenu() {
+  const template = [
+    {
+      label: 'File',
+      submenu: [
+        {
+          label: 'New Session',
+          accelerator: 'CmdOrCtrl+N',
+          click: () => {
+            if (mainWindow) {
+              mainWindow.webContents.send('new-session');
+            }
+          }
+        },
+        {
+          label: 'Clear All Data',
+          accelerator: 'CmdOrCtrl+Shift+Delete',
+          click: () => {
+            if (mainWindow) {
+              mainWindow.webContents.send('clear-data');
+            }
+          }
+        },
+        { type: 'separator' },
+        {
+          label: 'Quit',
+          accelerator: process.platform === 'darwin' ? 'Cmd+Q' : 'Ctrl+Q',
+          click: () => {
+            app.quit();
+          }
+        }
+      ]
+    },
+    {
+      label: 'View',
+      submenu: [
+        {
+          label: 'Refresh / Change Colors',
+          accelerator: 'F5',
+          click: () => {
+            if (mainWindow) {
+              mainWindow.reload();
+            }
+          }
+        },
+        {
+          label: 'Toggle Fullscreen',
+          accelerator: 'Alt+Enter',
+          click: () => {
+            if (mainWindow) {
+              mainWindow.setFullScreen(!mainWindow.isFullScreen());
+            }
+          }
+        },
+        {
+          label: 'Toggle Developer Tools',
+          accelerator: 'F12',
+          click: () => {
+            if (mainWindow) {
+              mainWindow.webContents.toggleDevTools();
+            }
+          }
+        }
+      ]
+    },
+    {
+      label: 'Help',
+      submenu: [
+        {
+          label: 'About Focus Cards',
+          click: () => {
+            if (mainWindow) {
+              mainWindow.webContents.send('show-about');
+            }
+          }
+        }
+      ]
+    }
+  ];
+
+  const menu = Menu.buildFromTemplate(template);
+  Menu.setApplicationMenu(menu);
+}
+
+// App event handlers
+app.whenReady().then(() => {
+  createWindow();
+  createMenu();
+
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow();
+    }
+  });
+});
+
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
+});
+
+app.on('will-quit', () => {
+  // Unregister all shortcuts
+  globalShortcut.unregisterAll();
+});
+
+// Security: Prevent new window creation
+app.on('web-contents-created', (event, contents) => {
+  contents.on('new-window', (event, navigationUrl) => {
+    event.preventDefault();
+    // Open external links in default browser
+    require('electron').shell.openExternal(navigationUrl);
+  });
+});

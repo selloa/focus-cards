@@ -109,6 +109,54 @@ function registerGlobalShortcuts() {
     }
   });
 
+  // Register Ctrl+4 for extra large window size
+  globalShortcut.register('CommandOrControl+4', () => {
+    if (mainWindow) {
+      mainWindow.setSize(400, 200);
+      mainWindow.center();
+    }
+  });
+
+  // Register Ctrl+5 for huge window size
+  globalShortcut.register('CommandOrControl+5', () => {
+    if (mainWindow) {
+      mainWindow.setSize(500, 250);
+      mainWindow.center();
+    }
+  });
+
+  // Register Ctrl+6 for massive window size
+  globalShortcut.register('CommandOrControl+6', () => {
+    if (mainWindow) {
+      mainWindow.setSize(600, 300);
+      mainWindow.center();
+    }
+  });
+
+  // Register Ctrl+7 for enormous window size
+  globalShortcut.register('CommandOrControl+7', () => {
+    if (mainWindow) {
+      mainWindow.setSize(700, 350);
+      mainWindow.center();
+    }
+  });
+
+  // Register Ctrl+8 for gigantic window size
+  globalShortcut.register('CommandOrControl+8', () => {
+    if (mainWindow) {
+      mainWindow.setSize(800, 400);
+      mainWindow.center();
+    }
+  });
+
+  // Register Ctrl+9 for maximum window size
+  globalShortcut.register('CommandOrControl+9', () => {
+    if (mainWindow) {
+      mainWindow.setSize(900, 450);
+      mainWindow.center();
+    }
+  });
+
   // Register Ctrl+T for Stay on Top toggle
   globalShortcut.register('CommandOrControl+T', () => {
     if (mainWindow) {
@@ -231,6 +279,66 @@ function createMenu() {
           click: () => {
             if (mainWindow) {
               mainWindow.setSize(300, 150);
+              mainWindow.center();
+            }
+          }
+        },
+        {
+          label: 'Window Size - Extra Large',
+          accelerator: 'CmdOrCtrl+4',
+          click: () => {
+            if (mainWindow) {
+              mainWindow.setSize(400, 200);
+              mainWindow.center();
+            }
+          }
+        },
+        {
+          label: 'Window Size - Huge',
+          accelerator: 'CmdOrCtrl+5',
+          click: () => {
+            if (mainWindow) {
+              mainWindow.setSize(500, 250);
+              mainWindow.center();
+            }
+          }
+        },
+        {
+          label: 'Window Size - Massive',
+          accelerator: 'CmdOrCtrl+6',
+          click: () => {
+            if (mainWindow) {
+              mainWindow.setSize(600, 300);
+              mainWindow.center();
+            }
+          }
+        },
+        {
+          label: 'Window Size - Enormous',
+          accelerator: 'CmdOrCtrl+7',
+          click: () => {
+            if (mainWindow) {
+              mainWindow.setSize(700, 350);
+              mainWindow.center();
+            }
+          }
+        },
+        {
+          label: 'Window Size - Gigantic',
+          accelerator: 'CmdOrCtrl+8',
+          click: () => {
+            if (mainWindow) {
+              mainWindow.setSize(800, 400);
+              mainWindow.center();
+            }
+          }
+        },
+        {
+          label: 'Window Size - Maximum',
+          accelerator: 'CmdOrCtrl+9',
+          click: () => {
+            if (mainWindow) {
+              mainWindow.setSize(900, 450);
               mainWindow.center();
             }
           }

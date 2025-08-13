@@ -67,6 +67,14 @@ class CardLearningSystem {
             }
         });
 
+        // Add paste event listener for bulk card input
+        this.cardInput.addEventListener('paste', (e) => {
+            this.resetFadeOut(); // Reset fade-out on paste
+            setTimeout(() => {
+                this.handleBulkInput();
+            }, 10); // Small delay to ensure paste content is in the input field
+        });
+
         // Swipe events for review and practice modes
         let startX = 0;
         let startY = 0;
@@ -262,6 +270,30 @@ class CardLearningSystem {
                 return;
             }
         } else {
+            // Check if the text contains semicolons (bulk input)
+            if (text.includes(';')) {
+                const cards = text.split(';')
+                    .map(card => card.trim())
+                    .filter(card => card.length > 0); // Remove empty cards
+                
+                if (cards.length > 1) {
+                    // Add all cards to the deck
+                    this.deckInit.push(...cards);
+                    this.emptyInputCount = 0;
+                    this.saveToLocalStorage();
+                    this.updateCardCounters();
+                    
+                    // Show feedback about how many cards were added
+                    this.showBulkInputFeedback(cards.length);
+                    
+                    // Clear the input
+                    this.cardInput.value = '';
+                    this.updateCursorPosition('');
+                    return;
+                }
+            }
+            
+            // Single card input
             this.emptyInputCount = 0;
             this.deckInit.push(text);
             this.saveToLocalStorage();
@@ -270,6 +302,75 @@ class CardLearningSystem {
         
         this.cardInput.value = '';
         this.updateCursorPosition('');
+    }
+
+    handleBulkInput() {
+        const text = this.cardInput.value.trim();
+        
+        // Check if the text contains semicolons (bulk input)
+        if (text.includes(';')) {
+            const cards = text.split(';')
+                .map(card => card.trim())
+                .filter(card => card.length > 0); // Remove empty cards
+            
+            if (cards.length > 1) {
+                // Add all cards to the deck
+                this.deckInit.push(...cards);
+                this.emptyInputCount = 0;
+                this.saveToLocalStorage();
+                this.updateCardCounters();
+                
+                // Show feedback about how many cards were added
+                this.showBulkInputFeedback(cards.length);
+                
+                // Clear the input
+                this.cardInput.value = '';
+                this.updateCursorPosition('');
+                return;
+            }
+        }
+        
+        // If no semicolons or only one card, handle as normal input
+        this.handleInputEnter();
+    }
+
+    showBulkInputFeedback(cardCount) {
+        // Create a temporary feedback element
+        const feedback = document.createElement('div');
+        feedback.textContent = `Added ${cardCount} cards`;
+        feedback.style.cssText = `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--text-primary);
+            color: var(--bg-primary);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 500;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        `;
+        
+        document.body.appendChild(feedback);
+        
+        // Fade in
+        setTimeout(() => {
+            feedback.style.opacity = '1';
+        }, 10);
+        
+        // Fade out and remove
+        setTimeout(() => {
+            feedback.style.opacity = '0';
+            setTimeout(() => {
+                if (feedback.parentNode) {
+                    feedback.parentNode.removeChild(feedback);
+                }
+            }, 300);
+        }, 2000);
     }
 
     advanceToReviewMode() {

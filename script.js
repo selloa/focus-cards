@@ -9,8 +9,14 @@ class CardLearningSystem {
         this.practiceRemovedCount = 0; // Track cards removed in practice mode
         this.reviewRightCount = 0; // Track cards moved right during current review session
         
+        // Fade-out functionality
+        this.inactivityTimer = null;
+        this.fadeOutDelay = 3000; // 3 seconds of inactivity before fade-out
+        this.fadeOutElements = [];
+        
         this.initializeElements();
         this.setupEventListeners();
+        this.setupInactivityTracking();
         this.loadFromLocalStorage();
         this.updateCardCounters(); // Initialize counters
     }
@@ -35,9 +41,11 @@ class CardLearningSystem {
         // Input mode events
         this.cardInput.addEventListener('input', (e) => {
             this.updateCursorPosition(e.target.value);
+            this.resetFadeOut(); // Reset fade-out on input
         });
 
         this.cardInput.addEventListener('keydown', (e) => {
+            this.resetFadeOut(); // Reset fade-out on keydown
             if (e.key === 'Enter') {
                 e.preventDefault();
                 this.handleInputEnter();
@@ -73,6 +81,7 @@ class CardLearningSystem {
             
             // Check if it's a horizontal swipe (not vertical)
             if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+                this.resetFadeOut(); // Reset fade-out on swipe
                 if (deltaX > 0) {
                     this.handleSwipeRight();
                 } else {
@@ -99,6 +108,7 @@ class CardLearningSystem {
             const deltaY = endY - startY;
             
             if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+                this.resetFadeOut(); // Reset fade-out on swipe
                 if (deltaX > 0) {
                     this.handleSwipeRight();
                 } else {
@@ -113,12 +123,69 @@ class CardLearningSystem {
         document.addEventListener('keydown', (e) => {
             if (this.currentMode === 2 || this.currentMode === 3) {
                 if (e.key === 'ArrowLeft') {
+                    this.resetFadeOut(); // Reset fade-out on keyboard swipe
                     this.handleSwipeLeft();
                 } else if (e.key === 'ArrowRight') {
+                    this.resetFadeOut(); // Reset fade-out on keyboard swipe
                     this.handleSwipeRight();
                 }
             }
         });
+    }
+
+    setupInactivityTracking() {
+        let lastActivityTime = Date.now();
+        let fadeOutActive = false;
+
+        const trackActivity = () => {
+            lastActivityTime = Date.now();
+            if (fadeOutActive) {
+                this.resetFadeOut();
+                fadeOutActive = false;
+            }
+        };
+
+        // Track various user activities
+        document.addEventListener('mousemove', trackActivity);
+        document.addEventListener('keydown', trackActivity);
+        document.addEventListener('touchstart', trackActivity);
+        document.addEventListener('click', trackActivity);
+        document.addEventListener('scroll', trackActivity);
+
+        // Check for inactivity every second
+        this.inactivityTimer = setInterval(() => {
+            if (Date.now() - lastActivityTime > this.fadeOutDelay && !fadeOutActive) {
+                this.triggerFadeOut();
+                fadeOutActive = true;
+            }
+        }, 1000);
+    }
+
+    triggerFadeOut() {
+        // Get all elements that should fade out
+        const counters = document.querySelectorAll('.card-counter');
+        const instructions = document.querySelectorAll('#swipe-instructions, #practice-swipe-instructions');
+        const arrows = document.querySelectorAll('.arrow');
+        const icons = document.querySelectorAll('.icon');
+
+        // Add fade-out class to all elements
+        counters.forEach(counter => counter.classList.add('fade-out'));
+        instructions.forEach(instruction => instruction.classList.add('fade-out'));
+        arrows.forEach(arrow => arrow.classList.add('fade-out'));
+        icons.forEach(icon => icon.classList.add('fade-out'));
+    }
+
+    resetFadeOut() {
+        // Remove fade-out class from all elements
+        const counters = document.querySelectorAll('.card-counter');
+        const instructions = document.querySelectorAll('#swipe-instructions, #practice-swipe-instructions');
+        const arrows = document.querySelectorAll('.arrow');
+        const icons = document.querySelectorAll('.icon');
+
+        counters.forEach(counter => counter.classList.remove('fade-out'));
+        instructions.forEach(instruction => instruction.classList.remove('fade-out'));
+        arrows.forEach(arrow => arrow.classList.remove('fade-out'));
+        icons.forEach(icon => icon.classList.remove('fade-out'));
     }
 
     updateCursorPosition(text) {
@@ -275,6 +342,9 @@ class CardLearningSystem {
         this.practiceMode.classList.remove('active');
         this.resetMode.classList.remove('active');
         
+        // Reset fade-out when switching modes
+        this.resetFadeOut();
+        
         // Show current mode
         switch (mode) {
             case 1:
@@ -351,7 +421,7 @@ class CardLearningSystem {
 
 // Initialize the application when the page loads
 document.addEventListener('DOMContentLoaded', () => {
-    new CardLearningSystem();
+    const cardSystem = new CardLearningSystem();
     
     // Ensure focus on input field when page loads
     setTimeout(() => {
@@ -359,5 +429,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (cardInput) {
             cardInput.focus();
         }
+        // Reset fade-out on page load
+        cardSystem.resetFadeOut();
     }, 100);
 });

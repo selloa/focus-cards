@@ -33,6 +33,11 @@ body {
     font-weight: bold;
     color: black;
     opacity: 0.6;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.card-counter.fade-out {
+    opacity: 0.1;
 }
 
 #left-counter {
@@ -157,6 +162,11 @@ body {
     bottom: 10vh;
     left: 50%;
     transform: translateX(-50%);
+    transition: opacity 0.5s ease-in-out;
+}
+
+#swipe-instructions.fade-out, #practice-swipe-instructions.fade-out {
+    opacity: 0.1;
 }
 
 .instruction {
@@ -165,6 +175,11 @@ body {
     display: flex;
     align-items: center;
     gap: 8px;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.instruction.fade-out {
+    opacity: 0.1;
 }
 
 .instruction.left {
@@ -180,11 +195,21 @@ body {
 .arrow {
     font-size: 1.5vw;
     opacity: 0.8;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.arrow.fade-out {
+    opacity: 0.1;
 }
 
 .icon {
     font-size: 2.5vw;
     opacity: 0.9;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.icon.fade-out {
+    opacity: 0.1;
 }
 
 /* Icon-specific styling */

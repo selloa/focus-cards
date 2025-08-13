@@ -2,6 +2,18 @@
 
 A minimalist, fullscreen web application for managing tasks, chores, exercises, and any other items you want to focus on. Built with a clean black and white design that helps you stay focused on what matters.
 
+## 👋 A Personal Note from the Creator
+
+Hi there! This is my first app, and I'm excited to share it with you. 
+
+The idea for FOCUS CARDS came from my own daily struggles with getting things done. I found myself using physical study cards to break down my morning routines, workout sessions, and daily chores into manageable pieces. When I couldn't get into my morning groove, I'd pull out my "morning motivation" cards. When I needed to work out, I had a dedicated set for that too.
+
+I wanted to capture that hands-on, tactile feeling of flipping through physical cards in a digital tool that's simple, intuitive, and actually helps you focus. No overwhelming features, no complex interfaces—just the essential workflow that makes study cards so effective. However, there are a lot of invisible features, that you can read about in the documentation or just find out by using the thing.
+
+The app is available both as a simple HTML file you can open in any browser and as a Windows 11 executable, so you can use it however works best for your workflow.
+
+I hope this tool helps you tackle your daily tasks with the same clarity and focus that those physical cards gave me!
+
 ## 🎯 What is FOCUS CARDS?
 
 FOCUS CARDS is a productivity tool that helps you organize and tackle your tasks through a simple three-mode workflow. Whether you have chores to do, breathing exercises to practice, or any other items you want to focus on, this app helps you prioritize and complete them systematically.

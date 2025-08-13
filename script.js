@@ -21,6 +21,9 @@ class CardLearningSystem {
         // Title screen state
         this.titleScreenActive = true;
         
+        // Cursor state - show at startup, hide after first interaction
+        this.cursorHidden = false;
+        
         this.initializeElements();
         this.setupEventListeners();
         this.setupInactivityTracking();
@@ -57,10 +60,28 @@ class CardLearningSystem {
         this.cardInput.addEventListener('input', (e) => {
             this.updateCursorPosition(e.target.value);
             this.resetFadeOut(); // Reset fade-out on input
+            
+            // Hide cursor once user starts typing
+            if (!this.cursorHidden && this.cursor) {
+                this.cursor.style.display = 'none';
+                this.cursorHidden = true;
+            }
+            
+            // Apply debounced text scaling to input field
+            if (e.target.value.trim()) {
+                debouncedTextScaling(e.target, e.target.value);
+            }
         });
 
         this.cardInput.addEventListener('keydown', (e) => {
             this.resetFadeOut(); // Reset fade-out on keydown
+            
+            // Hide cursor on any key press
+            if (!this.cursorHidden && this.cursor) {
+                this.cursor.style.display = 'none';
+                this.cursorHidden = true;
+            }
+            
             if (e.key === 'Enter') {
                 e.preventDefault();
                 this.handleInputEnter();
@@ -73,9 +94,27 @@ class CardLearningSystem {
         // Add paste event listener for bulk card input
         this.cardInput.addEventListener('paste', (e) => {
             this.resetFadeOut(); // Reset fade-out on paste
+            
+            // Hide cursor on paste
+            if (!this.cursorHidden && this.cursor) {
+                this.cursor.style.display = 'none';
+                this.cursorHidden = true;
+            }
+            
             setTimeout(() => {
                 this.handleBulkInput();
+                // Apply text scaling after paste
+                if (this.cardInput.value.trim()) {
+                    updateTextScaling(this.cardInput, this.cardInput.value);
+                }
             }, 10); // Small delay to ensure paste content is in the input field
+        });
+
+        // Hide cursor when input field is focused (but only if user has already interacted)
+        this.cardInput.addEventListener('focus', () => {
+            if (this.cursorHidden && this.cursor) {
+                this.cursor.style.display = 'none';
+            }
         });
 
         // Swipe events for review and practice modes
@@ -261,7 +300,8 @@ class CardLearningSystem {
 
     updateCursorPosition(text) {
         // Update cursor position based on text length
-        const textWidth = this.getTextWidth(text, '4vw');
+        const currentFontSize = getComputedStyle(this.cursor).fontSize;
+        const textWidth = this.getTextWidth(text, currentFontSize);
         this.cursor.style.left = `calc(50% + ${textWidth / 2}px)`;
     }
 
@@ -298,9 +338,11 @@ class CardLearningSystem {
                     // Show feedback about how many cards were added
                     this.showBulkInputFeedback(cards.length);
                     
-                    // Clear the input
+                    // Clear the input and reset font size
                     this.cardInput.value = '';
                     this.updateCursorPosition('');
+                    // Reset to base font size
+                    this.cardInput.style.fontSize = '';
                     return;
                 }
             }
@@ -314,6 +356,8 @@ class CardLearningSystem {
         
         this.cardInput.value = '';
         this.updateCursorPosition('');
+        // Reset to base font size
+        this.cardInput.style.fontSize = '';
     }
 
     handleBulkInput() {
@@ -335,9 +379,11 @@ class CardLearningSystem {
                 // Show feedback about how many cards were added
                 this.showBulkInputFeedback(cards.length);
                 
-                // Clear the input
+                // Clear the input and reset font size
                 this.cardInput.value = '';
                 this.updateCursorPosition('');
+                // Reset to base font size
+                this.cardInput.style.fontSize = '';
                 return;
             }
         }
@@ -405,6 +451,8 @@ class CardLearningSystem {
         if (this.currentMode === 2) {
             if (this.currentCardIndex < this.deckInit.length) {
                 this.cardText.textContent = this.deckInit[this.currentCardIndex];
+                // Apply text scaling to the card text
+                updateTextScaling(this.cardText, this.deckInit[this.currentCardIndex]);
             } else {
                 this.advanceToPracticeMode();
             }
@@ -413,6 +461,8 @@ class CardLearningSystem {
                 const randomIndex = Math.floor(Math.random() * this.deckNext.length);
                 this.practiceCardText.textContent = this.deckNext[randomIndex];
                 this.currentCardIndex = randomIndex;
+                // Apply text scaling to the practice card text
+                updateTextScaling(this.practiceCardText, this.deckNext[randomIndex]);
             } else {
                 this.advanceToResetMode();
             }
@@ -514,7 +564,13 @@ class CardLearningSystem {
             case 1:
                 this.inputMode.classList.add('active');
                 // Use setTimeout to ensure focus happens after DOM update
-                setTimeout(() => this.cardInput.focus(), 0);
+                setTimeout(() => {
+                    this.cardInput.focus();
+                    // Ensure cursor stays hidden when switching to input mode (only if user has interacted)
+                    if (this.cursorHidden && this.cursor) {
+                        this.cursor.style.display = 'none';
+                    }
+                }, 0);
                 break;
             case 2:
                 this.reviewMode.classList.add('active');
@@ -605,8 +661,170 @@ class CardLearningSystem {
     }
 }
 
-// Initialize the application when the page loads
+// Debounced text scaling for better performance
+let textScalingTimeout;
+function debouncedTextScaling(element, text) {
+    clearTimeout(textScalingTimeout);
+    textScalingTimeout = setTimeout(() => {
+        updateTextScaling(element, text);
+    }, 100); // 100ms delay
+}
+
+// Dynamic text scaling based on content length and window size
+function updateTextScaling(element, text) {
+    if (!element || !text) return;
+    
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
+    const maxWidth = windowWidth * 0.9; // 90% of window width
+    const maxHeight = windowHeight * 0.8; // 80% of window height
+    
+    // Start with the base font size from dynamic scaling
+    const baseFontSize = getComputedStyle(element).fontSize;
+    const baseSize = parseFloat(baseFontSize);
+    
+    // Create a temporary element to measure text dimensions
+    const tempElement = document.createElement('div');
+    tempElement.style.cssText = `
+        position: absolute;
+        visibility: hidden;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        font-family: ${getComputedStyle(element).fontFamily};
+        font-weight: ${getComputedStyle(element).fontWeight};
+        line-height: ${getComputedStyle(element).lineHeight};
+        padding: ${getComputedStyle(element).padding};
+        margin: ${getComputedStyle(element).margin};
+    `;
+    tempElement.textContent = text;
+    document.body.appendChild(tempElement);
+    
+    // Binary search for the optimal font size
+    let minSize = 8; // Minimum font size
+    let maxSize = baseSize;
+    let optimalSize = baseSize;
+    
+    while (minSize <= maxSize) {
+        const testSize = (minSize + maxSize) / 2;
+        tempElement.style.fontSize = `${testSize}px`;
+        
+        const textWidth = tempElement.offsetWidth;
+        const textHeight = tempElement.offsetHeight;
+        
+        if (textWidth <= maxWidth && textHeight <= maxHeight) {
+            optimalSize = testSize;
+            minSize = testSize + 1;
+        } else {
+            maxSize = testSize - 1;
+        }
+    }
+    
+    // Clean up temporary element
+    document.body.removeChild(tempElement);
+    
+    // Apply the optimal font size with smooth transition
+    element.style.fontSize = `${optimalSize}px`;
+}
+
+// Enhanced dynamic scaling function that includes text content scaling
+function updateDynamicScaling() {
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
+    const windowArea = windowWidth * windowHeight;
+    
+    // Base sizes for reference (160x80 = 12800 pixels)
+    const baseArea = 160 * 80;
+    const scaleFactor = Math.sqrt(windowArea / baseArea);
+    
+    // Counter scaling - scale down as window gets smaller
+    const counterElements = document.querySelectorAll('.card-counter span');
+    const baseCounterSize = 24; // Base font size
+    const minCounterSize = 8; // Minimum font size
+    const maxCounterSize = 32; // Maximum font size
+    
+    // Inverse scaling for counters - smaller window = smaller counters
+    const counterScale = Math.max(minCounterSize, Math.min(maxCounterSize, baseCounterSize / scaleFactor));
+    
+    counterElements.forEach(element => {
+        element.style.fontSize = `${counterScale}px`;
+    });
+    
+    // Card text scaling - scale up as window gets smaller to maintain prominence
+    const cardTextElements = document.querySelectorAll('#card-text, #practice-card-text, #card-input, #cursor');
+    const baseCardSize = 6; // Base vw size
+    const minCardSize = 8; // Minimum vw size
+    
+    // Maximum size should never exceed the title font size
+    // Title uses: 5vw base, 7vw mobile, 9vw small screens
+    let maxCardSize;
+    if (windowWidth <= 480) {
+        maxCardSize = 9; // Small screens: 9vw
+    } else if (windowWidth <= 768) {
+        maxCardSize = 7; // Mobile: 7vw
+    } else {
+        maxCardSize = 5; // Desktop: 5vw
+    }
+    
+    // Direct scaling for card text - smaller window = larger text
+    const cardScale = Math.max(minCardSize, Math.min(maxCardSize, baseCardSize * scaleFactor));
+    
+    cardTextElements.forEach(element => {
+        // Set base font size first
+        element.style.fontSize = `${cardScale}vw`;
+        
+        // Then apply content-based scaling if there's text (but not for cursor)
+        if (element.textContent && element.textContent.trim() && element.id !== 'cursor') {
+            updateTextScaling(element, element.textContent);
+        }
+    });
+    
+    // Watermark opacity - fade out as window gets smaller
+    const watermark = document.querySelector('.watermark');
+    const baseOpacity = 0.6; // Base opacity
+    const minOpacity = 0.1; // Minimum opacity
+    const maxOpacity = 0.8; // Maximum opacity
+    
+    // Inverse scaling for watermark - smaller window = lower opacity
+    const watermarkOpacity = Math.max(minOpacity, Math.min(maxOpacity, baseOpacity / scaleFactor));
+    
+    if (watermark) {
+        watermark.style.opacity = watermarkOpacity;
+    }
+    
+    // Adjust counter positions based on window size
+    const leftCounter = document.getElementById('left-counter');
+    const rightCounter = document.getElementById('right-counter');
+    
+    if (leftCounter && rightCounter) {
+        const baseMargin = 30;
+        const minMargin = 10;
+        const maxMargin = 50;
+        const marginScale = Math.max(minMargin, Math.min(maxMargin, baseMargin / scaleFactor));
+        
+        leftCounter.style.left = `${marginScale}px`;
+        rightCounter.style.right = `${marginScale}px`;
+    }
+}
+
+// Initialize scaling on load
 document.addEventListener('DOMContentLoaded', () => {
+    updateDynamicScaling();
+    
+    // Update scaling on window resize
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(updateDynamicScaling, 100);
+    });
+    
+    // Listen for scaling updates from main process
+    if (typeof require !== 'undefined') {
+        const { ipcRenderer } = require('electron');
+        ipcRenderer.on('update-scaling', () => {
+            setTimeout(updateDynamicScaling, 50);
+        });
+    }
+    
     const cardSystem = new CardLearningSystem();
     
     // Ensure focus on input field and reset fade-out after title screen (1.8s total)

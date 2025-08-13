@@ -109,11 +109,15 @@ body {
     top: 50%;
     transform: translateY(-50%);
     z-index: 1000;
-    font-size: 24px;
     font-weight: bold;
     color: var(--text-primary);
     opacity: 0.6;
-    transition: opacity 0.5s ease-in-out;
+    transition: opacity 0.5s ease-in-out, font-size 0.3s ease-in-out, left 0.3s ease-in-out, right 0.3s ease-in-out;
+}
+
+.card-counter span {
+    font-size: 24px; /* Base size, will be overridden by JavaScript */
+    transition: font-size 0.3s ease-in-out;
 }
 
 .card-counter.fade-out {
@@ -130,10 +134,6 @@ body {
 
 /* Responsive counter sizing */
 @media (max-width: 768px) {
-    .card-counter {
-        font-size: 20px;
-    }
-    
     #left-counter {
         left: 20px;
     }
@@ -144,10 +144,6 @@ body {
 }
 
 @media (max-width: 480px) {
-    .card-counter {
-        font-size: 18px;
-    }
-    
     #left-counter {
         left: 15px;
     }
@@ -186,7 +182,7 @@ body {
     background: transparent;
     border: none;
     outline: none;
-    font-size: 4vw;
+    font-size: 4vw; /* Base size, will be overridden by JavaScript */
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-weight: 300;
     color: var(--text-primary);
@@ -199,10 +195,11 @@ body {
     transform: translate(-50%, -50%);
     z-index: 1;
     caret-color: transparent;
+    transition: font-size 0.2s ease-in-out;
 }
 
 #cursor {
-    font-size: 4vw;
+    font-size: 4vw; /* Base size, will be overridden by JavaScript */
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-weight: 300;
     color: var(--text-primary);
@@ -212,6 +209,7 @@ body {
     transform: translate(-50%, -50%);
     z-index: 2;
     pointer-events: none;
+    transition: font-size 0.2s ease-in-out;
 }
 
 
@@ -229,12 +227,13 @@ body {
 }
 
 #card-text, #practice-card-text {
-    font-size: 6vw;
+    font-size: 6vw; /* Base size, will be overridden by JavaScript */
     line-height: 1.2;
     margin-bottom: 10vh;
     max-width: 90%;
     word-wrap: break-word;
     overflow-wrap: break-word;
+    transition: font-size 0.2s ease-in-out;
 }
 
 #swipe-instructions, #practice-swipe-instructions {
@@ -468,8 +467,8 @@ body {
     bottom: 20px;
     right: 20px;
     z-index: 9998;
-    opacity: 0;
-    transition: opacity 2s ease-in-out;
+    opacity: 0.6; /* Base opacity, will be overridden by JavaScript */
+    transition: opacity 0.5s ease-in-out;
     pointer-events: auto;
     cursor: pointer;
 }

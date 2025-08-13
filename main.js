@@ -90,6 +90,7 @@ function registerGlobalShortcuts() {
     if (mainWindow) {
       mainWindow.setSize(160, 80);
       mainWindow.center();
+      mainWindow.webContents.send('update-scaling');
     }
   });
 
@@ -98,6 +99,7 @@ function registerGlobalShortcuts() {
     if (mainWindow) {
       mainWindow.setSize(200, 100);
       mainWindow.center();
+      mainWindow.webContents.send('update-scaling');
     }
   });
 
@@ -106,6 +108,7 @@ function registerGlobalShortcuts() {
     if (mainWindow) {
       mainWindow.setSize(300, 150);
       mainWindow.center();
+      mainWindow.webContents.send('update-scaling');
     }
   });
 
@@ -114,6 +117,7 @@ function registerGlobalShortcuts() {
     if (mainWindow) {
       mainWindow.setSize(400, 200);
       mainWindow.center();
+      mainWindow.webContents.send('update-scaling');
     }
   });
 
@@ -122,6 +126,7 @@ function registerGlobalShortcuts() {
     if (mainWindow) {
       mainWindow.setSize(500, 250);
       mainWindow.center();
+      mainWindow.webContents.send('update-scaling');
     }
   });
 
@@ -130,6 +135,7 @@ function registerGlobalShortcuts() {
     if (mainWindow) {
       mainWindow.setSize(600, 300);
       mainWindow.center();
+      mainWindow.webContents.send('update-scaling');
     }
   });
 
@@ -138,6 +144,7 @@ function registerGlobalShortcuts() {
     if (mainWindow) {
       mainWindow.setSize(700, 350);
       mainWindow.center();
+      mainWindow.webContents.send('update-scaling');
     }
   });
 
@@ -146,6 +153,7 @@ function registerGlobalShortcuts() {
     if (mainWindow) {
       mainWindow.setSize(800, 400);
       mainWindow.center();
+      mainWindow.webContents.send('update-scaling');
     }
   });
 
@@ -154,6 +162,7 @@ function registerGlobalShortcuts() {
     if (mainWindow) {
       mainWindow.setSize(900, 450);
       mainWindow.center();
+      mainWindow.webContents.send('update-scaling');
     }
   });
 
@@ -260,6 +269,7 @@ function createMenu() {
             if (mainWindow) {
               mainWindow.setSize(160, 80);
               mainWindow.center();
+              mainWindow.webContents.send('update-scaling');
             }
           }
         },
@@ -270,6 +280,7 @@ function createMenu() {
             if (mainWindow) {
               mainWindow.setSize(200, 100);
               mainWindow.center();
+              mainWindow.webContents.send('update-scaling');
             }
           }
         },
@@ -280,6 +291,7 @@ function createMenu() {
             if (mainWindow) {
               mainWindow.setSize(300, 150);
               mainWindow.center();
+              mainWindow.webContents.send('update-scaling');
             }
           }
         },
@@ -290,6 +302,7 @@ function createMenu() {
             if (mainWindow) {
               mainWindow.setSize(400, 200);
               mainWindow.center();
+              mainWindow.webContents.send('update-scaling');
             }
           }
         },
@@ -300,6 +313,7 @@ function createMenu() {
             if (mainWindow) {
               mainWindow.setSize(500, 250);
               mainWindow.center();
+              mainWindow.webContents.send('update-scaling');
             }
           }
         },
@@ -310,6 +324,7 @@ function createMenu() {
             if (mainWindow) {
               mainWindow.setSize(600, 300);
               mainWindow.center();
+              mainWindow.webContents.send('update-scaling');
             }
           }
         },
@@ -320,6 +335,7 @@ function createMenu() {
             if (mainWindow) {
               mainWindow.setSize(700, 350);
               mainWindow.center();
+              mainWindow.webContents.send('update-scaling');
             }
           }
         },
@@ -330,6 +346,7 @@ function createMenu() {
             if (mainWindow) {
               mainWindow.setSize(800, 400);
               mainWindow.center();
+              mainWindow.webContents.send('update-scaling');
             }
           }
         },
@@ -340,6 +357,7 @@ function createMenu() {
             if (mainWindow) {
               mainWindow.setSize(900, 450);
               mainWindow.center();
+              mainWindow.webContents.send('update-scaling');
             }
           }
         },

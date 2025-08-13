@@ -85,6 +85,38 @@ function registerGlobalShortcuts() {
     }
   });
 
+  // Register Ctrl+1 for smallest window size
+  globalShortcut.register('CommandOrControl+1', () => {
+    if (mainWindow) {
+      mainWindow.setSize(160, 80);
+      mainWindow.center();
+    }
+  });
+
+  // Register Ctrl+2 for medium window size
+  globalShortcut.register('CommandOrControl+2', () => {
+    if (mainWindow) {
+      mainWindow.setSize(200, 100);
+      mainWindow.center();
+    }
+  });
+
+  // Register Ctrl+3 for larger window size
+  globalShortcut.register('CommandOrControl+3', () => {
+    if (mainWindow) {
+      mainWindow.setSize(300, 150);
+      mainWindow.center();
+    }
+  });
+
+  // Register Ctrl+T for Stay on Top toggle
+  globalShortcut.register('CommandOrControl+T', () => {
+    if (mainWindow) {
+      const isAlwaysOnTop = mainWindow.isAlwaysOnTop();
+      mainWindow.setAlwaysOnTop(!isAlwaysOnTop);
+    }
+  });
+
   // Register Ctrl+Shift+I for DevTools (development only)
   if (process.argv.includes('--dev')) {
     globalShortcut.register('CommandOrControl+Shift+I', () => {
@@ -169,6 +201,48 @@ function createMenu() {
           click: () => {
             if (mainWindow) {
               mainWindow.setFullScreen(!mainWindow.isFullScreen());
+            }
+          }
+        },
+        { type: 'separator' },
+        {
+          label: 'Window Size - Small',
+          accelerator: 'CmdOrCtrl+1',
+          click: () => {
+            if (mainWindow) {
+              mainWindow.setSize(160, 80);
+              mainWindow.center();
+            }
+          }
+        },
+        {
+          label: 'Window Size - Medium',
+          accelerator: 'CmdOrCtrl+2',
+          click: () => {
+            if (mainWindow) {
+              mainWindow.setSize(200, 100);
+              mainWindow.center();
+            }
+          }
+        },
+        {
+          label: 'Window Size - Large',
+          accelerator: 'CmdOrCtrl+3',
+          click: () => {
+            if (mainWindow) {
+              mainWindow.setSize(300, 150);
+              mainWindow.center();
+            }
+          }
+        },
+        { type: 'separator' },
+        {
+          label: 'Toggle Stay on Top',
+          accelerator: 'CmdOrCtrl+T',
+          click: () => {
+            if (mainWindow) {
+              const isAlwaysOnTop = mainWindow.isAlwaysOnTop();
+              mainWindow.setAlwaysOnTop(!isAlwaysOnTop);
             }
           }
         },

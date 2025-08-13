@@ -24,6 +24,7 @@ class CardLearningSystem {
         this.loadFromLocalStorage();
         this.updateCardCounters(); // Initialize counters
         this.initializeColorScheme(); // Initialize random color scheme
+        this.showTitleScreen(); // Show title screen on load
     }
 
     initializeElements() {
@@ -40,6 +41,9 @@ class CardLearningSystem {
         // Card counter elements
         this.deckCountElement = document.getElementById('deck-count');
         this.practiceRemovedElement = document.getElementById('practice-removed-count');
+        
+        // Title screen element
+        this.titleScreen = document.getElementById('title-screen');
     }
 
     setupEventListeners() {
@@ -206,6 +210,22 @@ class CardLearningSystem {
         if (scheme !== 'default') {
             document.documentElement.setAttribute('data-theme', scheme);
         }
+    }
+
+    showTitleScreen() {
+        // Title screen timing: fade in (0.4s) + brief linger (0.2s) + fade out (1.2s) = 1.8s total
+        setTimeout(() => {
+            if (this.titleScreen) {
+                this.titleScreen.classList.add('fade-out');
+                
+                // Remove title screen from DOM after fade out
+                setTimeout(() => {
+                    if (this.titleScreen && this.titleScreen.parentNode) {
+                        this.titleScreen.parentNode.removeChild(this.titleScreen);
+                    }
+                }, 1200);
+            }
+        }, 600); // 0.4s fade in + 0.2s linger = 0.6s before starting fade out
     }
 
     updateCursorPosition(text) {
@@ -443,7 +463,7 @@ class CardLearningSystem {
 document.addEventListener('DOMContentLoaded', () => {
     const cardSystem = new CardLearningSystem();
     
-    // Ensure focus on input field when page loads
+    // Ensure focus on input field and reset fade-out after title screen (1.8s total)
     setTimeout(() => {
         const cardInput = document.getElementById('card-input');
         if (cardInput) {
@@ -451,5 +471,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         // Reset fade-out on page load
         cardSystem.resetFadeOut();
-    }, 100);
+    }, 1800); // Wait for title screen to complete
 });

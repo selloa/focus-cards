@@ -1,3 +1,82 @@
+/* Color Scheme Variables */
+:root {
+    /* Default Scheme - Clean Black & White */
+    --bg-primary: white;
+    --text-primary: black;
+    --text-secondary: rgba(0, 0, 0, 0.6);
+    --text-tertiary: rgba(0, 0, 0, 0.7);
+    --text-quaternary: rgba(0, 0, 0, 0.8);
+    --text-quinary: rgba(0, 0, 0, 0.9);
+    --discard-color: #ff4444;
+    --progress-color: #44aa44;
+    --infinity-color: #4444ff;
+}
+
+/* Color Scheme 1 - Warm Earth Tones */
+[data-theme="warm"] {
+    --bg-primary: #f8f4f0;
+    --text-primary: #2c1810;
+    --text-secondary: rgba(44, 24, 16, 0.6);
+    --text-tertiary: rgba(44, 24, 16, 0.7);
+    --text-quaternary: rgba(44, 24, 16, 0.8);
+    --text-quinary: rgba(44, 24, 16, 0.9);
+    --discard-color: #d2691e;
+    --progress-color: #8fbc8f;
+    --infinity-color: #6b8e23;
+}
+
+/* Color Scheme 2 - Cool Ocean */
+[data-theme="ocean"] {
+    --bg-primary: #f0f8ff;
+    --text-primary: #1a365d;
+    --text-secondary: rgba(26, 54, 93, 0.6);
+    --text-tertiary: rgba(26, 54, 93, 0.7);
+    --text-quaternary: rgba(26, 54, 93, 0.8);
+    --text-quinary: rgba(26, 54, 93, 0.9);
+    --discard-color: #e53e3e;
+    --progress-color: #38a169;
+    --infinity-color: #3182ce;
+}
+
+/* Color Scheme 3 - Soft Lavender */
+[data-theme="lavender"] {
+    --bg-primary: #faf5ff;
+    --text-primary: #2d3748;
+    --text-secondary: rgba(45, 55, 72, 0.6);
+    --text-tertiary: rgba(45, 55, 72, 0.7);
+    --text-quaternary: rgba(45, 55, 72, 0.8);
+    --text-quinary: rgba(45, 55, 72, 0.9);
+    --discard-color: #c53030;
+    --progress-color: #38a169;
+    --infinity-color: #805ad5;
+}
+
+/* Color Scheme 4 - Sage Green */
+[data-theme="sage"] {
+    --bg-primary: #f7fafc;
+    --text-primary: #2f855a;
+    --text-secondary: rgba(47, 133, 90, 0.6);
+    --text-tertiary: rgba(47, 133, 90, 0.7);
+    --text-quaternary: rgba(47, 133, 90, 0.8);
+    --text-quinary: rgba(47, 133, 90, 0.9);
+    --discard-color: #e53e3e;
+    --progress-color: #38a169;
+    --infinity-color: #2f855a;
+}
+
+/* Color Scheme 5 - Minimal Gray */
+[data-theme="minimal"] {
+    --bg-primary: #f8f9fa;
+    --text-primary: #495057;
+    --text-secondary: rgba(73, 80, 87, 0.6);
+    --text-tertiary: rgba(73, 80, 87, 0.7);
+    --text-quaternary: rgba(73, 80, 87, 0.8);
+    --text-quinary: rgba(73, 80, 87, 0.9);
+    --discard-color: #dc3545;
+    --progress-color: #28a745;
+    --infinity-color: #007bff;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -6,8 +85,8 @@
 
 body {
     font-family: 'Arial', sans-serif;
-    background-color: white;
-    color: black;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
     overflow: hidden;
     height: 100vh;
     width: 100vw;
@@ -15,6 +94,7 @@ body {
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
+    transition: background-color 0.5s ease, color 0.5s ease;
 }
 
 #app {
@@ -31,7 +111,7 @@ body {
     z-index: 1000;
     font-size: 24px;
     font-weight: bold;
-    color: black;
+    color: var(--text-primary);
     opacity: 0.6;
     transition: opacity 0.5s ease-in-out;
 }
@@ -107,7 +187,9 @@ body {
     border: none;
     outline: none;
     font-size: 4vw;
-    color: black;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 300;
+    color: var(--text-primary);
     text-align: center;
     width: 90%;
     max-width: 800px;
@@ -121,7 +203,9 @@ body {
 
 #cursor {
     font-size: 4vw;
-    color: black;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 300;
+    color: var(--text-primary);
     position: absolute;
     left: 50%;
     top: 50%;
@@ -171,7 +255,7 @@ body {
 
 .instruction {
     font-size: 2vw;
-    opacity: 0.7;
+    color: var(--text-tertiary);
     display: flex;
     align-items: center;
     gap: 8px;
@@ -194,7 +278,7 @@ body {
 
 .arrow {
     font-size: 1.5vw;
-    opacity: 0.8;
+    color: var(--text-quaternary);
     transition: opacity 0.5s ease-in-out;
 }
 
@@ -204,7 +288,7 @@ body {
 
 .icon {
     font-size: 2.5vw;
-    opacity: 0.9;
+    color: var(--text-quinary);
     transition: opacity 0.5s ease-in-out;
 }
 
@@ -214,15 +298,15 @@ body {
 
 /* Icon-specific styling */
 .discard-icon {
-    color: #ff4444;
+    color: var(--discard-color);
 }
 
 .progress-icon {
-    color: #44aa44;
+    color: var(--progress-color);
 }
 
 .infinity-icon {
-    color: #4444ff;
+    color: var(--infinity-color);
     font-weight: bold;
 }
 
@@ -238,7 +322,7 @@ body {
 
 #reset-message p {
     font-size: 2vw;
-    opacity: 0.7;
+    color: var(--text-secondary);
 }
 
 /* Responsive text scaling */
@@ -321,4 +405,59 @@ body {
 @keyframes swipeRight {
     0% { transform: translateX(0); opacity: 1; }
     100% { transform: translateX(100vw); opacity: 0; }
+}
+
+/* Title Screen */
+.title-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--bg-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 1;
+    transition: opacity 1.2s ease-in-out;
+}
+
+.title-screen.fade-out {
+    opacity: 0;
+}
+
+.title-text {
+    font-size: 5vw;
+    font-weight: 300;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: var(--text-primary);
+    letter-spacing: 0.05em;
+    text-align: center;
+    opacity: 0;
+    animation: titleFadeIn 0.4s ease-in-out forwards;
+}
+
+@keyframes titleFadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive title sizing */
+@media (max-width: 768px) {
+    .title-text {
+        font-size: 7vw;
+    }
+}
+
+@media (max-width: 480px) {
+    .title-text {
+        font-size: 9vw;
+    }
 }

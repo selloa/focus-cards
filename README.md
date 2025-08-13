@@ -15,12 +15,16 @@ FOCUS CARDS is a productivity tool that helps you organize and tackle your tasks
 - **Auto-Fade UI**: Interface elements fade out during inactivity for cleaner focus
 - **Color Schemes**: Multiple calming color themes that start randomly on each load
 - **Responsive Design**: Optimized for any screen size
+- **Bulk Card Input**: Paste lists of cards separated by semicolons (;) for quick input
+- **Fullscreen Mode**: Press F during startup to enter fullscreen mode in browsers
+- **Dynamic Color Refresh**: Refresh the page to get a new random color scheme
 
 ## 🚀 How to Use
 
 ### Mode 1: Input Cards
 - **Type anything** you want to focus on: chores, exercises, todo items, etc.
 - Press **Enter** to save each card
+- **Bulk Input**: Paste multiple cards separated by semicolons (;) for quick input
 - Press **Enter three times** on empty input to finish and move to review mode
 - Press **Backspace** on empty input to clear all memory
 
@@ -50,6 +54,7 @@ FOCUS CARDS is a productivity tool that helps you organize and tackle your tasks
 - **Enter** key for input confirmation
 - **Backspace** key on empty input to clear memory
 - **Mouse click and drag** for swiping
+- **F key** during startup to enter fullscreen mode
 
 ## 💡 Use Cases
 

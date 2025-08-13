@@ -27,9 +27,22 @@
       "*.css",
       "assets/**/*"
     ],
+    "compression": "maximum",
+    "removePackageScripts": true,
+    "removePackageKeywords": true,
+    "extraResources": [],
+    "extraFiles": [],
+    "asar": true,
+    "forceCodeSigning": false,
     "win": {
-      "target": "nsis",
-      "icon": "assets/icon.ico"
+      "target": [
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "assets/icon.ico",
+      "artifactName": "${productName}-${version}-webview.${ext}"
     }
   }
 }

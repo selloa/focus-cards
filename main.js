@@ -1,6 +1,9 @@
 const { app, BrowserWindow, Menu, globalShortcut } = require('electron');
 const path = require('path');
 
+// Enable WebView2
+app.commandLine.appendSwitch('enable-features', 'WebView2');
+
 // Keep a global reference of the window object
 let mainWindow;
 
@@ -15,7 +18,11 @@ function createWindow() {
       nodeIntegration: false,
       contextIsolation: true,
       enableRemoteModule: false,
-      webSecurity: true
+      webSecurity: true,
+      devTools: false, // Disable DevTools in production
+      spellcheck: false, // Disable spellcheck
+      webviewTag: true, // Enable WebView2
+      webviewTag: true
     },
     icon: path.join(__dirname, 'assets/icon.ico'),
     show: false, // Don't show until ready
@@ -23,7 +30,11 @@ function createWindow() {
     frame: false,
     fullscreenable: true,
     resizable: true,
-    backgroundColor: '#ffffff'
+    backgroundColor: '#ffffff',
+    // Disable unnecessary features
+    webSecurity: true,
+    allowRunningInsecureContent: false,
+    experimentalFeatures: false
   });
 
   // Load the index.html file

@@ -246,7 +246,6 @@ class CardLearningSystem {
         
         this.saveToLocalStorage();
         this.showMode(1);
-        this.cardInput.focus();
     }
 
     showMode(mode) {
@@ -260,7 +259,8 @@ class CardLearningSystem {
         switch (mode) {
             case 1:
                 this.inputMode.classList.add('active');
-                this.cardInput.focus();
+                // Use setTimeout to ensure focus happens after DOM update
+                setTimeout(() => this.cardInput.focus(), 0);
                 break;
             case 2:
                 this.reviewMode.classList.add('active');
@@ -308,4 +308,12 @@ class CardLearningSystem {
 // Initialize the application when the page loads
 document.addEventListener('DOMContentLoaded', () => {
     new CardLearningSystem();
+    
+    // Ensure focus on input field when page loads
+    setTimeout(() => {
+        const cardInput = document.getElementById('card-input');
+        if (cardInput) {
+            cardInput.focus();
+        }
+    }, 100);
 });

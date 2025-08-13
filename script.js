@@ -18,6 +18,9 @@ class CardLearningSystem {
         this.colorSchemes = ['default', 'warm', 'ocean', 'lavender', 'sage', 'minimal'];
         this.currentColorSchemeIndex = 0;
         
+        // Title screen state
+        this.titleScreenActive = true;
+        
         this.initializeElements();
         this.setupEventListeners();
         this.setupInactivityTracking();
@@ -139,6 +142,12 @@ class CardLearningSystem {
                     this.handleSwipeRight();
                 }
             }
+            
+            // Secret fullscreen shortcut (only during title screen)
+            if (e.key.toLowerCase() === 'f' && this.titleScreenActive) {
+                this.resetFadeOut(); // Reset fade-out on fullscreen toggle
+                this.toggleFullscreen();
+            }
         });
     }
 
@@ -223,6 +232,8 @@ class CardLearningSystem {
                     if (this.titleScreen && this.titleScreen.parentNode) {
                         this.titleScreen.parentNode.removeChild(this.titleScreen);
                     }
+                    // Disable fullscreen shortcut after title screen is completely gone
+                    this.titleScreenActive = false;
                 }, 1200);
             }
         }, 600); // 0.4s fade in + 0.2s linger = 0.6s before starting fade out
@@ -455,6 +466,28 @@ class CardLearningSystem {
         }
         if (this.practiceRemovedElement) {
             this.practiceRemovedElement.textContent = this.practiceRemovedCount;
+        }
+    }
+
+    toggleFullscreen() {
+        if (!document.fullscreenElement) {
+            // Enter fullscreen
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen();
+            } else if (document.documentElement.webkitRequestFullscreen) {
+                document.documentElement.webkitRequestFullscreen();
+            } else if (document.documentElement.msRequestFullscreen) {
+                document.documentElement.msRequestFullscreen();
+            }
+        } else {
+            // Exit fullscreen
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+            }
         }
     }
 }

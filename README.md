@@ -31,6 +31,137 @@ FOCUS CARDS is a productivity tool that helps you organize and tackle your tasks
 - **Fullscreen Mode**: Press F during startup to enter fullscreen mode in browsers
 - **Dynamic Color Refresh**: Refresh the page to get a new random color scheme
 
+## 🔍 All Input Features & Hidden Functionality
+
+### **🎯 Core Input Features**
+
+1. **Text Input Field**
+   - Type any task, chore, exercise, or focus item
+   - Press **Enter** to save each card
+   - Real-time cursor positioning that follows text length
+
+2. **Bulk Card Input (Hidden Feature)**
+   - Paste multiple cards separated by semicolons (`;`)
+   - Automatically splits and adds all cards at once
+   - Shows feedback: "Added X cards" notification
+   - Example: `"Task 1; Task 2; Task 3"` adds 3 cards instantly
+
+3. **Mode Advancement**
+   - Press **Enter three times** on empty input to finish input mode
+   - Moves to review mode automatically
+
+### **🗑️ Memory Management (Hidden Features)**
+
+4. **Clear All Memory**
+   - Press **Backspace** on empty input field
+   - Completely clears all cards from all decks
+   - Removes data from localStorage
+
+### **🎮 Navigation & Controls**
+
+5. **Touch/Mobile Controls**
+   - **Tap and swipe** left/right on cards
+   - **Tap and hold** to see swipe instructions
+   - **Tap** input field to focus
+
+6. **Desktop Controls**
+   - **Arrow keys** (←/→) for swiping cards
+   - **Enter** key for input confirmation
+   - **Mouse click and drag** for swiping
+   - **Backspace** on empty input to clear memory
+
+7. **Secret Fullscreen Shortcut (Hidden Feature)**
+   - Press **F key** during title screen (first 1.8 seconds)
+   - Toggles fullscreen mode in browser
+   - Only works during startup animation
+
+### **🎨 Visual & UI Features**
+
+8. **Auto-Fade UI (Hidden Feature)**
+   - Interface elements fade out after 3 seconds of inactivity
+   - Counters, instructions, arrows, and icons disappear
+   - Any activity (mouse, keyboard, touch) resets the fade timer
+   - Creates distraction-free focus environment
+
+9. **Dynamic Color Schemes (Hidden Feature)**
+   - 6 different color themes: default, warm, ocean, lavender, sage, minimal
+   - Randomly selected on each page load/refresh
+   - Refresh page to get new random color scheme
+
+10. **Title Screen Animation**
+    - 1.8-second startup animation with fade in/out
+    - Watermark appears after 0.4 seconds
+    - Fullscreen shortcut only available during this period
+
+### **📊 Progress Tracking**
+
+11. **Smart Card Counters**
+    - **Left counter**: Shows different values based on current mode
+      - Input mode: Total cards in deck
+      - Review mode: Cards moved to focus pile (current session)
+      - Practice mode: Remaining cards in focus pile
+    - **Right counter**: Cards completed/removed in practice mode
+
+12. **Session Tracking**
+    - Tracks cards moved right during review session
+    - Tracks cards removed during practice session
+    - Resets counters appropriately when switching modes
+
+### **💾 Data Persistence**
+
+13. **Local Storage**
+    - All cards persist between browser sessions
+    - Saves deck states, counters, and progress
+    - Works offline without internet connection
+
+### **🔄 Workflow Features**
+
+14. **Three-Mode Workflow**
+    - **Mode 1 (Input)**: Add cards with text input or bulk paste
+    - **Mode 2 (Review)**: Swipe right to focus pile, left to storage
+    - **Mode 3 (Practice)**: Work with focus pile, swipe left to complete
+    - **Mode 4 (Reset)**: Auto-returns to input mode with stored cards restored
+
+15. **Automatic Mode Transitions**
+    - Input → Review: After 3 empty enters
+    - Review → Practice: When all cards reviewed
+    - Practice → Reset: When focus pile empty
+    - Reset → Input: After 2 seconds with stored cards restored
+
+### **🎯 Advanced Features**
+
+16. **Random Card Display**
+    - Practice mode shows cards in random order
+    - Keeps scrolling until you find what you want to do
+
+17. **Swipe Animations**
+    - Visual feedback for left/right swipes
+    - 300ms animation duration
+
+18. **Responsive Design**
+    - Works on any screen size
+    - Touch-friendly on mobile devices
+    - Keyboard-friendly on desktop
+
+19. **Progressive Web App Ready**
+    - Can be installed on mobile devices
+    - Works offline
+    - No dependencies or build process required
+
+### **🔧 Technical Hidden Features**
+
+20. **Activity Tracking**
+    - Monitors mouse movement, keyboard input, touch events, clicks, and scrolling
+    - Used for fade-out timer management
+
+21. **Text Width Calculation**
+    - Dynamically calculates cursor position based on text length
+    - Uses canvas for precise text measurement
+
+22. **Cross-Browser Fullscreen Support**
+    - Supports multiple browser fullscreen APIs
+    - Webkit, Mozilla, and standard implementations
+
 ## 🚀 How to Use
 
 ### Mode 1: Input Cards
